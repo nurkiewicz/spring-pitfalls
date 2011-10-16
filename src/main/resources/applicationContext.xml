@@ -13,6 +13,8 @@
 
 	<context:component-scan base-package="com.blogspot.nurkiewicz"/>
 
-	<tx:annotation-driven/>
+	<context:load-time-weaver/>
+	<tx:annotation-driven mode="aspectj"/>
+	<aop:config proxy-target-class="true"/>
 
 </beans>

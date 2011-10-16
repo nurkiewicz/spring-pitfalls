@@ -1,0 +1,12 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+
+	<aspects>
+		<!--<aspect name=""/>-->
+	</aspects>
+
+	<weaver options="-showWeaveInfo  -XmessageHandlerClass:org.springframework.aop.aspectj.AspectJWeaverMessageHandler">
+		<include within="com.blogspot.nurkiewicz..*"/>
+	</weaver>
+
+</aspectj>
