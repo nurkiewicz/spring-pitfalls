@@ -61,10 +61,9 @@
 			<version>1.6.10</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-instrument</artifactId>
-			<version>${org.springframework.version}</version>
-			<scope>provided</scope>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.6.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -204,12 +203,6 @@
 			<version>1.6.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>    <!-- Force this to be downloaded as surefire plugin needs this JAR -->
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-instrument</artifactId>
-			<version>${org.springframework.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -240,14 +233,41 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<forkMode>always</forkMode>
-					<argLine>
-						-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${org.springframework.version}/spring-instrument-${org.springframework.version}.jar
-					</argLine>
-				</configuration>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpathref="maven.plugin.classpath"/>
+								<iajc
+										srcDir="src/main/scala"
+										destDir="target/classes"
+										inpath="target/classes"
+										source="1.6"
+										aspectPath="${org.springframework:spring-aspects:jar}"
+										classpathRef="maven.compile.classpath"
+										Xlint="ignore"/>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjrt</artifactId>
+						<version>1.6.10</version>
+					</dependency>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjtools</artifactId>
+						<version>1.6.10</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
